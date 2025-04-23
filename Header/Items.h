@@ -10,7 +10,7 @@ enum class ItemType {
     Weapon, //+atk
     Armor, //+def
     Funny, //fun items with only entertainment value=0
-    CursedWeapon, //-atk
+    CursedWeapon, //-a
     CursedArmor, //-def
     Gold //++gold
 };
