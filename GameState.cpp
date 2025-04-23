@@ -115,7 +115,6 @@ std::vector<std::string> GameState::getSaveFilesInfo() {
 
     return saveInfo;
 }
-
 // Level up player stats and auto-save
 void GameState::levelUp()
 {
