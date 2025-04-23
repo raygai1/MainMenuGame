@@ -1,0 +1,3 @@
+/Users/jacksoncaron/CLionProjects/Final_Adventure_april23/cmake-build-debug/CMakeFiles/MainMenuGame.dir
+/Users/jacksoncaron/CLionProjects/Final_Adventure_april23/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/jacksoncaron/CLionProjects/Final_Adventure_april23/cmake-build-debug/CMakeFiles/rebuild_cache.dir
