@@ -13,6 +13,7 @@ GameState::GameState()
       attack(10), defense(0), gold(0), playerSneak(3) {}
 
 
+
 void GameState::saveToBinary(const std::string& filename) {
     std::ofstream outFile(filename, std::ios::binary);
     if (!outFile) {
