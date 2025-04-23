@@ -17,8 +17,7 @@ add_executable(MainMenuGame
         Header/menuSystem.h
         Header/Items.h
         Items.cpp
-        Header/Game_Header.h
-)
+        Header/Game_Header.h)
 
 # Include directories for header files
 include_directories(Header)
