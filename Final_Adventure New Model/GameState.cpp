@@ -4,7 +4,8 @@
 #include <iostream>           //print output
 #include <fstream>            //read/write saves
 #include <filesystem>         //filesystem utilities
-namespace fs = std::filesystem;
+using namespace std;
+namespace fs = filesystem;
 extern GameState currentGame; //Global GameState object
 int enemiesDefeated = 0;      //tracks enemies for boss fight
 
@@ -86,10 +87,10 @@ GameState::GameState()
       attack(10), defense(0), gold(0), playerSneak(3) {}
 
 //save current player to a .dat file
-void GameState::saveToBinary(const std::string& filename) {
-    std::ofstream outFile(filename, std::ios::binary);
+void GameState::saveToBinary(const string& filename) {
+    ofstream outFile(filename, ios::binary);
     if (!outFile) {
-        std::cerr << "Failed to open file for saving.\n";
+        cerr << "Failed to open file for saving.\n";
         return;
     }
 
@@ -125,14 +126,14 @@ void GameState::saveToBinary(const std::string& filename) {
         outFile.write(reinterpret_cast<const char*>(&item.statEffect), sizeof(item.statEffect));
     }
 
-    std::cout << "Game saved successfully!\n";
+    cout << "Game saved successfully!\n";
 }
 
 //load player data from .dat file
-bool GameState::loadFromBinary(const std::string& filename) {
-    std::ifstream inFile(filename, std::ios::binary);
+bool GameState::loadFromBinary(const string& filename) {
+    ifstream inFile(filename, ios::binary);
     if (!inFile) {
-        std::cerr << "Failed to open file for loading.\n";
+        cerr << "Failed to open file for loading.\n";
         return false;
     }
 
@@ -152,10 +153,10 @@ bool GameState::loadFromBinary(const std::string& filename) {
     for (size_t i = 0; i < inventorySize; ++i) {
         size_t nameLen, descLen;
         inFile.read(reinterpret_cast<char*>(&nameLen), sizeof(nameLen));
-        std::string name(nameLen, '\0');
+        string name(nameLen, '\0');
         inFile.read(&name[0], nameLen);
         inFile.read(reinterpret_cast<char*>(&descLen), sizeof(descLen));
-        std::string desc(descLen, '\0');
+        string desc(descLen, '\0');
         inFile.read(&desc[0], descLen);
         int typeInt;
         inFile.read(reinterpret_cast<char*>(&typeInt), sizeof(typeInt));
@@ -173,26 +174,26 @@ bool GameState::loadFromBinary(const std::string& filename) {
     defense = 0;
     playerSneak = level * 3;
 
-    std::cout << "Loaded stats - HP: " << playerHealth << ", Atk: " << attack << ", Def: " << defense << "\n";
-    std::cout << "Game loaded successfully!\n";
+    cout << "Loaded stats - HP: " << playerHealth << ", Atk: " << attack << ", Def: " << defense << "\n";
+    cout << "Game loaded successfully!\n";
     return true;
 }
 
 //show list of saved games
-std::vector<std::string> GameState::getSaveFilesInfo() {
-    std::vector<std::string> saveInfo;
+vector<string> GameState::getSaveFilesInfo() {
+    vector<string> saveInfo;
     for (const auto& entry : fs::directory_iterator(".")) {
         if (entry.path().extension() == ".dat") {
-            std::ifstream inFile(entry.path(), std::ios::binary);
+            ifstream inFile(entry.path(), ios::binary);
             if (inFile) {
                 size_t nameLength;
                 inFile.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
-                std::string name(nameLength, '\0');
+                string name(nameLength, '\0');
                 inFile.read(&name[0], nameLength);
                 int lvl;
                 inFile.read(reinterpret_cast<char*>(&lvl), sizeof(lvl));
 
-                std::ostringstream info;
+                ostringstream info;
                 info << entry.path().filename().string() << " | " << name << " (Level " << lvl << ")";
                 saveInfo.push_back(info.str());
             }
@@ -209,7 +210,7 @@ void GameState::levelUp() {
         xpToNextLevel += level * 30;
         playerHealth += level * 20;
         attack += level * 10;
-        std::cout << "Level up! Now Level " << level << ", HP: " << playerHealth
+        cout << "Level up! Now Level " << level << ", HP: " << playerHealth
                   << ", Gold: " << gold << "\n";
     }
     saveToBinary("savegame_" + playerName + ".dat"); //save after level up
@@ -218,30 +219,30 @@ void GameState::levelUp() {
 //add xp points
 void GameState::gainXP(int amount) {
     xp += amount;
-    std::cout << "You gained " << amount << " XP! Total XP: " << xp << "\n";
+    cout << "You gained " << amount << " XP! Total XP: " << xp << "\n";
 }
 
 //add gold
 void GameState::addGold(int amount) {
     gold += amount;
-    std::cout << "You gained " << amount << " gold!\n";
+    cout << "You gained " << amount << " gold!\n";
 }
 
 //heal player hp
 void GameState::healHP(int amount) {
     playerHealth += amount;
     if (playerHealth > 100) playerHealth = 100;
-    std::cout << "You healed for " << amount << " HP! Current HP: " << playerHealth << std::endl;
+    cout << "You healed for " << amount << " HP! Current HP: " << playerHealth << endl;
 }
 
 //ask player for character name
 void GameState::setPlayerName() {
-    std::cout << "Enter your character's name (letters/spaces only): ";
-    std::getline(std::cin, playerName);
+    cout << "Enter your character's name (letters/spaces only): ";
+    getline(cin, playerName);
 
     for (char& c : playerName) {
         if (!isalpha(c) && !isspace(c)) {
-            std::cout << "Invalid name. Using default: Unknown\n";
+            cout << "Invalid name. Using default: Unknown\n";
             playerName = "Unknown";
             return;
         }
@@ -251,34 +252,34 @@ void GameState::setPlayerName() {
 
 //display all player stats nicely
 void GameState::displayStats() const {
-    std::cout << "=== Character Stats ===\n";
-    std::cout << "Name: " << playerName << "\n";
-    std::cout << "Level: " << level << " | Health: " << playerHealth << " | Gold: " << gold << "\n";
-    std::cout << "XP: " << xp << " / " << xpToNextLevel << "\n";
-    std::cout << "Attack: " << attack << " | Defense: " << defense << "\n";
-    std::cout << "Inventory:\n";
+    cout << "=== Character Stats ===\n";
+    cout << "Name: " << playerName << "\n";
+    cout << "Level: " << level << " | Health: " << playerHealth << " | Gold: " << gold << "\n";
+    cout << "XP: " << xp << " / " << xpToNextLevel << "\n";
+    cout << "Attack: " << attack << " | Defense: " << defense << "\n";
+    cout << "Inventory:\n";
     for (const auto& item : inventory) {
-        std::cout << " - " << item.name << " (" << item.description << ")\n";
+        cout << " - " << item.name << " (" << item.description << ")\n";
     }
 }
 
 //show a summary of save files
 void GameState::listSavedCharacters() {
-    std::cout << "\nSaved Characters:\n";
+    cout << "\nSaved Characters:\n";
     for (const auto& entry : fs::directory_iterator(".")) {
         if (entry.path().extension() == ".dat") {
-            std::ifstream inFile(entry.path(), std::ios::binary);
+            ifstream inFile(entry.path(), ios::binary);
             if (inFile) {
                 size_t nameLength;
                 inFile.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
-                std::string name(nameLength, '\0');
+                string name(nameLength, '\0');
                 inFile.read(&name[0], nameLength);
                 int lvl;
                 inFile.read(reinterpret_cast<char*>(&lvl), sizeof(lvl));
-                std::cout << " - " << entry.path().filename().string()
+                cout << " - " << entry.path().filename().string()
                           << " | Name: " << name << " | Level: " << lvl << "\n";
             }
         }
     }
-    std::cout << "\n";
+    cout << "\n";
 }
