@@ -8,13 +8,14 @@ public:
     Merchant(); // Constructor
 
     // Display buff options as a menu, return chosen option
-    int showBuffs() const;
+    int showBuffs(GameState& game) const;
 
     // Purchase the selected buff
     void purchaseBuff(GameState& game, int choice);
 
 private:
-    const int BUFF_COST = 100; // Each buff costs 100 gold
+    int calculateBuffCost(GameState& game) const;
+
 };
 
 #endif // MERCHANT_H
