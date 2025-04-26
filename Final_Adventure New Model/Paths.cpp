@@ -13,7 +13,7 @@ using namespace std;
 void choosePathAndFight(GameState& game, int luck);
 
 // Sneak mechanic before combat
-void sneak(GameState& game, int& awareness, const std::string& enemyName, bool& success) {
+void sneak(GameState& game, int& awareness, const string& enemyName, bool& success) {
     int roll = getRandomNumber(1, 100);
     int score = game.playerSneak + roll;
     int threshold = awareness + 25;
@@ -128,7 +128,7 @@ void choosePathAndFight(GameState& game, int luck) {
         }
         case 3: { // Visit merchant
             Merchant merchant;
-            int buffChoice = merchant.showBuffs();
+            int buffChoice = merchant.showBuffs(game);
             if (buffChoice != 5) {
                 merchant.purchaseBuff(game, buffChoice);
                 cout << "\nPress ENTER to continue...";
@@ -158,7 +158,7 @@ void choosePathAndFight(GameState& game, int luck) {
 
         switch (postChoice) {
         case 0: { // Bonfire
-            int heal = 40 * game.level;
+            double heal = 50 * (0.5 * game.level);
             game.healHP(heal);
             cout << "You rest and heal " << heal << " HP.\n";
             cin.ignore();
@@ -166,7 +166,7 @@ void choosePathAndFight(GameState& game, int luck) {
         }
         case 1: { // Merchant
             Merchant merchant;
-            int buffChoice = merchant.showBuffs();
+            int buffChoice = merchant.showBuffs(game);
             if (buffChoice != 5) {
                 merchant.purchaseBuff(game, buffChoice);
                 cout << "\nPress ENTER to continue...";
@@ -198,8 +198,10 @@ void choosePathAndFight(GameState& game, int luck) {
             ocombat bossResult = combat(game, bossHealth, finalBoss.name);
 
             if (bossResult == ocombat::Victory || bossResult == ocombat::BossTime) {
-                cout << "You have slain the Ancient Beast!\n";
-                game.addGold(500);
+                int bossGold = getRandomNumber(50,150);
+                cout << "You have slain the Boss\n";
+                cout << "You looted " << bossGold << " gold from the " << finalBoss.name << "!\n";
+                game.addGold(bossGold);
                 game.bossDefeated = true;
                 game.enemiesDefeated = 0;
                 game.saveToBinary("savegame_" + game.playerName + ".dat");
