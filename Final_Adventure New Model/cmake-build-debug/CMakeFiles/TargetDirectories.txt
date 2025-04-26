@@ -1,0 +1,3 @@
+C:/Users/ZWatk/CLionProjects/Final_Adventure New Model/cmake-build-debug/CMakeFiles/MainMenuGame.dir
+C:/Users/ZWatk/CLionProjects/Final_Adventure New Model/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ZWatk/CLionProjects/Final_Adventure New Model/cmake-build-debug/CMakeFiles/rebuild_cache.dir
