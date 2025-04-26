@@ -1,59 +1,73 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include <vector>
-#include <string>
-#include "Environment.h"
-#include "Items.h"
+#include <vector>   //vector container
+#include <string>   //string objects
+#include "Environment.h" //for random number and environments
+#include "Items.h"       //item types and inventory
 
+// Stores player stats, inventory, buffs
 class GameState {
 public:
-    std::string playerName; //character name
-    int level;              //current level
-    int xp;                 //current XP
-    int xpToNextLevel;      //XP needed to level up
-    int playerHealth;       //current HP
-    int attack;             //base attack stat
-    int defense;            //reduces incoming damage
-    int gold;               //currency
-    int playerSneak;        //sneak chance
-    int enemiesDefeated = 0; // counts regular enemy victories
-    bool bossDefeated = false; // track if boss was already defeated
-    //Merchant related
-    int getGold() const;
-    void decreaseGold(int amount);
-    int getAttack() const;
-    int getSneak() const;
-    int getMaxHealth() const;
-    int runBonus = 0; //integer added to Run roll
-    int buffHealth = 0;
-    int buffAttack = 0;
-    int buffSneak = 0;
-    int buffRun = 0;
-    void increaseRunBonus(int amount); //adds to run chance
-    void increaseAttack(int amount);
-    void increaseSneak(int amount);
-    void increaseMaxHealth(int amount);
+    std::string playerName;   //character name
+    int level;                //current level
+    int xp;                   //current XP
+    int xpToNextLevel;        //XP needed to level up
+    int playerHealth;         //current HP
+    int maxHealth;            //maximum HP (for healing)
+    int attack;               //base attack power
+    int defense;              //defense stat (reduces damage)
+    int gold;                 //currency
+    int playerSneak;          //sneak skill
+    int enemiesDefeated = 0;  //number of normal enemies defeated
+    bool bossDefeated = false; //true if boss was beaten
 
-    std::vector<Item> inventory; //held items
+    // Merchant temporary buffs
+    int runBonus = 0;         //permanent flee bonus
+    int buffHealth = 0;       //temporary HP buff
+    int buffAttack = 0;       //temporary attack buff
+    int buffSneak = 0;        //temporary sneak buff
+    int buffRun = 0;          //temporary flee buff
 
-    GameState(); //sets default stats
+    std::vector<Item> inventory; //player's items
 
-    void saveToBinary(const std::string& filename);   //save to .dat
-    bool loadFromBinary(const std::string& filename); //load .dat
-    void levelUp(); //increase stats + auto-save
-    void setPlayerName(); //input name
-    void displayStats() const; //display all info
-    void listSavedCharacters(); //show all .dat saves
-    static std::vector<std::string> getSaveFilesInfo(); //get filenames, names & lvls
+    // Constructor - sets default starting stats
+    GameState();
 
-    int getHealth() const { return playerHealth; } //return HP
-    int getAttack() { return getRandomNumber(1, 35) + attack; } //roll attack
-    void healHP(int heal); //restore HP
-    void takeDamage(int damage); //reduce HP from enemy
-    void gainXP(int amount); //add XP
-    void addGold(int amount); //earn gold
-    void applyItem(const Item& item); //add item & apply stat effect
+    // Save and load
+    void saveToBinary(const std::string& filename);   //save player data
+    bool loadFromBinary(const std::string& filename); //load player data
+
+    // Core functions
+    void levelUp();               //level up if enough XP
+    void setPlayerName();          //name input
+    void displayStats() const;     //show player stats
+    void listSavedCharacters();    //list saved characters
+    static std::vector<std::string> getSaveFilesInfo(); //list save files info
+
+    // Combat accessors
+    int getHealth() const { return playerHealth; } //return current HP
+    int getAttack() { return getRandomNumber(1, 35) + attack; } //return random attack roll
+    int getMaxHealth() const { return maxHealth; } //return max HP
+    int getGold() const; //return gold
+    int getSneak() const; //return sneak value
+
+    // Combat modifiers
+    void healHP(int heal);      //heal HP
+    void takeDamage(int damage); //lose HP from attack
+    void gainXP(int amount);    //gain XP
+    void addGold(int amount);   //gain gold
+    void applyItem(const Item& item); //apply item effects
+
+    // Buff-related changes
+    void increaseAttack(int amount);      //buff attack
+    void increaseSneak(int amount);        //buff sneak
+    void increaseMaxHealth(int amount);    //buff max HP
+    void increaseRunBonus(int amount);     //buff run chance
+    void decreaseGold(int amount); //decrease player's gold
 };
-void displayStats(); //global display call
+
+//external global function
+void displayStats(); //global stat display
+
 #endif
