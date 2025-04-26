@@ -7,7 +7,7 @@
 #include "Header/combatSystem.h"
 
 using namespace std;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 GameState currentGame; //tracks current player state globally
 
